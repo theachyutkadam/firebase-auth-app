@@ -1,9 +1,3 @@
-// guides table data
-db.collection('guides').get().then(snapShot => {
-  setupGuides(snapShot.docs);
-  console.log(snapShot.docs);
-})
-
 // signup
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (e) => {
@@ -52,8 +46,12 @@ loginForm.addEventListener('submit', (e) => {
 // auth status change.
 auth.onAuthStateChanged(user => {
   if (user){
-    console.log('user logged in!', user)
+    db.collection('guides').get().then(snapShot => {
+      setupGuides(snapShot.docs);
+      setupUI(user);
+    })
   }else{
-    console.log('user logged out!')
+    setupGuides([]);
+    setupUI();
   }
 })
