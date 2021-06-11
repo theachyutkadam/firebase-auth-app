@@ -1,3 +1,4 @@
+const createForm = document.querySelector('#create-form');
 const guideList = document.querySelector('.guides');
 const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
@@ -35,25 +36,18 @@ const setupGuides = (data) => {
 }
 
 // create guides
-// const guideData = document.querySelector('#create-form');
-// guideData.addEventListener('create', (e) => {
-//   e.preventDefault();
+createForm.addEventListener('submit', (e) => {
+  e.preventDefault();
 
-//   alert("hello")
-//   const title = guideData['title'].value
-//   const content = guideData['content'].value
-//   console.log(title)
-//   console.log(content)
-  // db.collection('guides').add({
-  //   title = guideData.title.value,
-  //   content = guideData.content.value
-  // });
-  // guideData.title.value = '';
-  // guideData.content.value = '';
-  //get guide info
-  // const title = guideData['title'].value
-  // const content = guideData['content'].value
-// });
+  db.collection('guides').add({
+    title: createForm['title'].value,
+    content: createForm['content'].value
+  }).then(() => {
+    const modal = document.querySelector('#modal-create');
+    M.Modal.getInstance(modal).close();
+    createForm.reset();
+  })
+});
 
 
 // setup materialize components
