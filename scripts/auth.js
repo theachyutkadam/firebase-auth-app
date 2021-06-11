@@ -9,11 +9,13 @@ signupForm.addEventListener('submit', (e) => {
 
   // sign up the user
   auth.createUserWithEmailAndPassword(email, password).then(cred => {
-    console.log(cred.user);
+    return db.collection('users').doc(cred.user.uid).set({
+      bio: signupForm['signup-bio'].value
+    })
+  }).then(() => {
     // close the signup modal & reset form
     const modal = document.querySelector('#modal-signup');
     M.Modal.getInstance(modal).close();
-
     signupForm.reset();
   });
 });
@@ -50,7 +52,9 @@ auth.onAuthStateChanged(user => {
     db.collection('guides').onSnapshot(snapShot => {
       setupGuides(snapShot.docs);
       setupUI(user);
-    })
+    }, err => {
+      console.log(err.message);
+    });
   }else{
     setupGuides([]);
     setupUI();
