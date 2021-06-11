@@ -45,8 +45,9 @@ loginForm.addEventListener('submit', (e) => {
 
 // auth status change.
 auth.onAuthStateChanged(user => {
+  console.log(user)
   if (user){
-    db.collection('guides').get().then(snapShot => {
+    db.collection('guides').onSnapshot(snapShot => {
       setupGuides(snapShot.docs);
       setupUI(user);
     })

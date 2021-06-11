@@ -2,13 +2,19 @@ const createForm = document.querySelector('#create-form');
 const guideList = document.querySelector('.guides');
 const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
+const accountDetails = document.querySelector('.account-details');
 
 const setupUI = (user) => {
   if (user){
     // toggle UI elements
+    const html = `
+      <div>Logged in as ${user.email}</div>
+    `;
+    accountDetails.innerHTML = html;
     loggedInLinks.forEach(item => item.style.display = 'block');
     loggedOutLinks.forEach(item => item.style.display = 'none');
   }else{
+    accountDetails.innerHTML = '';
     // toggle UI elements
     loggedInLinks.forEach(item => item.style.display = 'none');
     loggedOutLinks.forEach(item => item.style.display = 'block');
@@ -48,7 +54,6 @@ createForm.addEventListener('submit', (e) => {
     createForm.reset();
   })
 });
-
 
 // setup materialize components
 document.addEventListener('DOMContentLoaded', function() {
