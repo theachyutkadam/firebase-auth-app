@@ -1,15 +1,19 @@
-const createForm = document.querySelector('#create-form');
 const guideList = document.querySelector('.guides');
 const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
 const accountDetails = document.querySelector('.account-details');
+const adminItems = document.querySelectorAll('.admin')
 
 const setupUI = (user) => {
   if (user){
+    if (user.admin){
+      adminItems.forEach(item => item.style.display = 'block');
+    }
     db.collection('users').doc(user.uid).get().then(doc => {
       const html = `
         <div>Logged in as ${user.email}</div>
         <div>${doc.data().bio}</div>
+        <div class="pink-text">${user.admin? 'Admin' : ''}</div>
       `;
       accountDetails.innerHTML = html;
     })
@@ -18,6 +22,7 @@ const setupUI = (user) => {
     loggedInLinks.forEach(item => item.style.display = 'block');
     loggedOutLinks.forEach(item => item.style.display = 'none');
   }else{
+    adminItems.forEach(item => item.style.display = 'none');
     accountDetails.innerHTML = '';
     // toggle UI elements
     loggedInLinks.forEach(item => item.style.display = 'none');
@@ -44,20 +49,6 @@ const setupGuides = (data) => {
     guideList.innerHTML = '<h5 class="center align">Login to view guides</h5>'
   }
 }
-
-// create guides
-createForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  db.collection('guides').add({
-    title: createForm['title'].value,
-    content: createForm['content'].value
-  }).then(() => {
-    const modal = document.querySelector('#modal-create');
-    M.Modal.getInstance(modal).close();
-    createForm.reset();
-  })
-});
 
 // setup materialize components
 document.addEventListener('DOMContentLoaded', function() {
